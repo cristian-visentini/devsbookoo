@@ -34,7 +34,7 @@ class UserDaoMysql implements UserDAO{
              //chega ate aqui
             if($sql->rowCount() > 0){
                 //não esta entrando nesse if portanto retorna false levando de volta a tela de login
-                
+
                 $data = $sql->fetch(PDO::FETCH_ASSOC);
                 $user = $this->GenerateUser($data);
                 return $user;
@@ -70,7 +70,7 @@ class UserDaoMysql implements UserDAO{
         work = :work,
         avatar = :avatar,
         cover = :cover,
-        token = :token,
+        token = :token
         WHERE id = :id');
 
         $sql->bindValue(':email', $u->Email);
