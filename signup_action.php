@@ -25,8 +25,7 @@ if($Name && $Email && $Password && $Birthdate){
     }
 
     if($Auth->EmailExists($Email) === false){
-        echo "chegou aqui";
-        exit;
+        
         $Auth->UserRegister($Name, $Email, $Password, $Birthdate);
         header('Location: '.$Base);
     }else{

@@ -13,10 +13,10 @@ class Auth {
     public function CheckToken(){
         if(!empty($_SESSION['token'])){
             $Token = $_SESSION['token'];
-
+            
             $UserDao = new UserDaoMysql($this->pdo);
             $User = $UserDao->FindByToken($Token);
-
+            
             if($User){
                 return $User;
             }
@@ -29,13 +29,15 @@ class Auth {
     public function ValidateLogin($Email, $Password){
         $UserDao = new UserDaoMysql($this->pdo);
         $User = $UserDao->FindByEmail($Email);
-
+       
         if($User){
-
+            
             if(password_verify($Password, $User->Password)){
+                //ok
                 $Token = md5(time().rand(0, 999));
                 $_SESSION['token'] = $Token;
                 $User->Token = $Token;
+                //ok
                 $UserDao->Update($User);
 
                 return true;

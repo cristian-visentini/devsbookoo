@@ -10,6 +10,7 @@ if($Email && $Password){
 
     if($Auth->ValidateLogin($Email, $Password)){
         header('Location: '.$Base);
+        exit;
     }
 }
 

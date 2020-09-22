@@ -22,6 +22,8 @@ class UserDaoMysql implements UserDAO{
         $U->Avatar = $array['avatar'] ?? '';
         $U->Cover = $array['cover'] ?? '';
         $U->Token = $array['token'] ?? '';
+
+        return $U;
     }
 
     public function FindByToken($token){
@@ -29,8 +31,10 @@ class UserDaoMysql implements UserDAO{
             $sql = $this->pdo->prepare("SELECT * FROM users WHERE token = :token");
             $sql->bindValue(':token', $token);
             $sql->execute();
-
+             //chega ate aqui
             if($sql->rowCount() > 0){
+                //não esta entrando nesse if portanto retorna false levando de volta a tela de login
+                
                 $data = $sql->fetch(PDO::FETCH_ASSOC);
                 $user = $this->GenerateUser($data);
                 return $user;
@@ -41,14 +45,17 @@ class UserDaoMysql implements UserDAO{
 
     public function FindByEmail($email){
         if(!empty($email)){
+            
             $sql = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $sql->bindValue(':email', $email);
+            $sql->bindValue(":email", $email);
             $sql->execute();
 
             if($sql->rowCount() > 0){
+                
                 $data = $sql->fetch(PDO::FETCH_ASSOC);
                 $user = $this->GenerateUser($data);
-                return $user;
+                
+                return $user; //ok
             }
         }
         return false;
@@ -91,6 +98,7 @@ class UserDaoMysql implements UserDAO{
         $sql->bindValue(':birthdate', $U->BirthDate);
         $sql->bindValue(':token', $U->Token);
         $sql->execute();
+
         return true;
     }
 }
