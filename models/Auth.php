@@ -4,18 +4,20 @@ require_once 'dao/UserDaoMysql.php';
 class Auth {
     private $pdo;
     private $Base;
+    private $Dao;
 
     public function __construct(PDO $pdo, $Base){
         $this->pdo = $pdo;
         $this->Base = $Base;
+        $this->Dao = new UserDaoMysql($this->pdo);
     }
 
     public function CheckToken(){
         if(!empty($_SESSION['token'])){
             $Token = $_SESSION['token'];
             
-            $UserDao = new UserDaoMysql($this->pdo);
-            $User = $UserDao->FindByToken($Token);
+            
+            $User = $this->Dao->FindByToken($Token);
             
             if($User){
                 return $User;
@@ -27,9 +29,9 @@ class Auth {
     }
 
     public function ValidateLogin($Email, $Password){
-        $UserDao = new UserDaoMysql($this->pdo);
-        $User = $UserDao->FindByEmail($Email);
-       
+        
+        $User = $this->Dao->FindByEmail($Email);
+        
         if($User){
             
             if(password_verify($Password, $User->Password)){
@@ -38,7 +40,7 @@ class Auth {
                 $_SESSION['token'] = $Token;
                 $User->Token = $Token;
                 //ok
-                $UserDao->Update($User);
+                $this->Dao->Update($User);
 
                 return true;
             }
@@ -48,13 +50,13 @@ class Auth {
     }
 
     public function EmailExists($Email){
-        $UserDao = new UserDaoMysql($this->pdo);
+       
         
-        return $UserDao->FindByEmail($Email) ? true : false;
+        return $this->Dao->FindByEmail($Email) ? true : false;
     }
 
     public function UserRegister($Name, $Email, $Password, $Birthdate){
-        $UserDao = new UserDaoMysql($this->pdo);
+        
 
         $Hash = password_hash($Password, PASSWORD_DEFAULT);
         $Token = md5(time().rand(0, 999));
@@ -66,7 +68,7 @@ class Auth {
         $NewUser->BirthDate = $Birthdate;
         $NewUser->Token = $Token;
 
-        $UserDao->Insert($NewUser);
+        $this->Dao->Insert($NewUser);
 
         $_SESSION['token'] = $Token;
     }
