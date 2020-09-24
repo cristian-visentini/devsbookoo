@@ -1,22 +1,32 @@
 <?php
 require 'config.php';
 require 'models/Auth.php';
+require_once 'dao/PostDaoMysql.php';
 
 $Auth = new Auth($pdo, $Base);
 
 $UserInfo = $Auth->CheckToken();
 $ActiveMenu = "home";
 
+$PostDao = new PostDaoMysql($pdo);
+$Feed = $PostDao->GetHomeFeed($UserInfo->Id);
+
+
+
 require 'partials/header.php';
 require 'partials/menu.php';
 ?>
+
+
 <section class="feed mt-10">
     <div class="row">
         <div class="column pr-5">
 
-            <?php
-            require 'partials/feed-editor.php';
-            ?>
+            <?php require 'partials/feed-editor.php';?>
+
+            <?php foreach($Feed as $Item):?>
+                <?php require 'partials/feed-item.php';?>
+            <?php endforeach;?>
 
 
 

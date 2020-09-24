@@ -60,6 +60,29 @@ class UserDaoMysql implements UserDAO{
         }
         return false;
     }
+
+
+    public function FindById($Id){
+        if(!empty($Id)){
+            
+            $sql = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+            $sql->bindValue(":id", $Id);
+            $sql->execute();
+
+            if($sql->rowCount() > 0){
+                
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+                $user = $this->GenerateUser($data);
+                
+                return $user; //ok
+            }
+        }
+        return false;
+
+    }
+
+
+
     public function Update(User $u){
         $sql = $this->pdo->prepare('UPDATE users SET
         email = :email,

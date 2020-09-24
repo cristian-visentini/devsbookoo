@@ -15,6 +15,7 @@ class User{
 interface UserDAO{
     public function FindByToken($token);
     public function FindByEmail($email);
+    public function FindById($Id);
     public function Update(User $u);
     public function Insert(User $U);
 }
