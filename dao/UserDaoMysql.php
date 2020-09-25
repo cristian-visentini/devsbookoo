@@ -29,11 +29,20 @@ class UserDaoMysql implements UserDAO{
             //Followers = Quem segue o usuario
 
             $U->Followers = $UrDaoMysql->GetFollowers($U->Id);
-            
+
+            foreach($U->Followers as $Key => $Follower_Id){
+                $NewUser = $this->FindById($Follower_Id);
+                $U->Followers[$Key] = $NewUser;
+            }
 
             //Following = Quem o usuario segue
 
             $U->Following = $UrDaoMysql->GetFollowing($U->Id);
+
+            foreach($U->Following as $Key => $Follower_Id){
+                $NewUser = $this->FindById($Follower_Id);
+                $U->Following[$Key] = $NewUser;
+            }
 
             //Fotos
 
