@@ -24,39 +24,41 @@ require 'partials/menu.php';
     <form method="POST" class="config-form" enctype="multipart/form-data" action="configuracoes_action.php">
         <label>
             Novo Avatar:<br>
-            <input type="file" name="avatar">
+            <input type="file" name="avatar"><br>
+            <img class="mini" src="<?=$Base;?>/media/avatars/<?=$UserInfo->Avatar?>">
         </label>
 
         <label>
             Nova Capa:<br>
-            <input type="file" name="cover">
+            <input type="file" name="cover"><br>
+            <img class="mini" src="<?=$Base;?>/media/covers/<?=$UserInfo->Cover?>">
         </label>
 
         <hr>
 
         <label>
             Nome Completo:<br>
-            <input type="text" name="name">
+            <input type="text" name="name" value="<?=$UserInfo->Name;?>">
         </label>
 
         <label>
-            Nova Capa:<br>
-            <input type="email" name="email">
+            Email:<br>
+            <input type="email" name="email" value="<?=$UserInfo->Email;?>">
         </label>
 
         <label>
             Data de Nascimento:<br>
-            <input type="text" name="birthdate">
+            <input type="text" id="birthdate" name="birthdate" value="<?=date('d/m/Y', strtotime($UserInfo->BirthDate));?>">
         </label>
 
         <label>
             Cidade:<br>
-            <input type="text" name="city">
+            <input type="text" name="city" value="<?=$UserInfo->City;?>">
         </label>
 
         <label>
             Trabalho:<br>
-            <input type="text" name="work">
+            <input type="text" name="work" value="<?=$UserInfo->Work;?>">
         </label>
 
         <hr>
@@ -76,6 +78,14 @@ require 'partials/menu.php';
 
     </form>
 </section>
+
+<script src="https://unpkg.com/imask"> </script>
+    <script >
+    IMask(
+        document.getElementById('birthdate'),
+        {mask:'00/00/0000'}
+    );
+    </script>
 
 <?php
 require 'partials/footer.php';
