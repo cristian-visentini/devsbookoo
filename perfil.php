@@ -1,7 +1,7 @@
 <?php
-require 'config.php';
-require 'models/Auth.php';
-require 'dao/PostDaoMysql.php';
+require_once 'config.php';
+require_once 'models/Auth.php';
+require_once 'dao/PostDaoMysql.php';
 
 
 $Auth = new Auth($pdo, $Base);
@@ -169,10 +169,10 @@ require 'partials/menu.php';
 
                             <div class="user-photo-item">
                                 <a href="#modal-1" rel="modal:open">
-                                    <img src="media/uploads/1.jpg" />
+                                    <img src="<?=$Base;?>/media/uploads/<?=$Item->Body;?>" />
                                 </a>
                                 <div id="modal-1" style="display:none">
-                                    <img src="<?= $Base; ?>/media/uploads/1.jpg" />
+                                    <img src="<?=$Base;?>/media/uploads/<?=$Item->Body;?> />
                                 </div>
                             </div>
 

@@ -12,4 +12,5 @@ interface PostDAO{
     public function Insert(Post $P);
     public function GetHomeFeed($Id_User);
     public function GetUserFeed($Id_User);
+    public function GetPhotosFrom($Id_User);
 }
