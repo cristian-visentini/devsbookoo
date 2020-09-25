@@ -7,7 +7,7 @@ require_once 'dao/PostDaoMysql.php';
 $Auth = new Auth($pdo, $Base);
 
 $UserInfo = $Auth->CheckToken();
-$ActiveMenu = "profile";
+$ActiveMenu = 'profile';
 
 $User = [];
 $Feed = [];
@@ -19,6 +19,8 @@ if (!$Id) {
 }
 
 if ($Id != $UserInfo->Id) {
+    echo "<script>alert('Segundo if');</script>";
+    exit;
     $ActiveMenu = "";
 }
 
@@ -165,14 +167,14 @@ require 'partials/menu.php';
 
 
                     <?php if (count($User->Photos) > 0) : ?>
-                        <?php foreach ($User->Photos as $Item) : ?>
+                        <?php foreach ($User->Photos as $Key => $Item) : ?>
 
                             <div class="user-photo-item">
-                                <a href="#modal-1" rel="modal:open">
-                                    <img src="<?=$Base;?>/media/uploads/<?=$Item->Body;?>" />
+                                <a href="#modal-<?= $Key; ?>" rel="modal:open">
+                                    <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
                                 </a>
-                                <div id="modal-1" style="display:none">
-                                    <img src="<?=$Base;?>/media/uploads/<?=$Item->Body;?> />
+                                <div id="modal-<?= $Key; ?>" style="display:none">
+                                    <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
                                 </div>
                             </div>
 
