@@ -7,5 +7,6 @@ class UserRelation{
 
 interface UserRelationDAO{
     public function Insert(UserRelation $U);
-    public function GetRelationsFrom($Id);
+    public function GetFollowing($Id);
+    public function GetFollowers($Id);
 }
