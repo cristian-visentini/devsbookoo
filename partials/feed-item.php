@@ -40,6 +40,19 @@ switch($Item->Type){
         </div>
         <div class="feed-item-comments">
 
+            <div class="feed-item-comments-area">
+            <?php foreach($Item->Comments as $Comments):?>
+                <div class="fic-item row m-height-10 m-width-20">
+                                    <div class="fic-item-photo">
+                                        <a href="<?=$Base;?>/perfil.php?id=<?=$Comments->Id_User;?>"><img src="<?=$Base;?>/media/avatars/<?=$Comments->User->Avatar;?>" /></a>
+                                    </div>
+                                    <div class="fic-item-info">
+                                        <a href="<?=$Base;?>/perfil.php?id=<?=$Comments->Id_User;?>"><?=$Comments->User->Name;?></a>
+                                        <?=$Comments->Body;?>
+                                    </div>
+                                </div>
+            <?php endforeach;?>
+            </div>
             
 
             <div class="fic-answer row m-height-10 m-width-20">
