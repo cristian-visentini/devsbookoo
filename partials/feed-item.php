@@ -1,4 +1,6 @@
 <?php
+require_once 'feed_item_script.php';
+
 $ActionPhrase = '';
 
 switch($Item->Type){
@@ -13,7 +15,7 @@ switch($Item->Type){
 
 ?>
 
-<div class="box feed-item">
+<div class="box feed-item" data-id="<?=$Item->Id;?>">
     <div class="box-body">
         <div class="feed-item-head row mt-20 m-width-20">
             <div class="feed-item-head-photo">

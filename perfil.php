@@ -19,8 +19,6 @@ if (!$Id) {
 }
 
 if ($Id != $UserInfo->Id) {
-    echo "<script>alert('Segundo if');</script>";
-    exit;
     $ActiveMenu = "";
 }
 

@@ -92,7 +92,7 @@ class UserDaoMysql implements UserDAO{
 
     public function FindById($Id, $Full = false){
         if(!empty($Id)){
-            
+        
             $sql = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
             $sql->bindValue(":id", $Id);
             $sql->execute();
