@@ -10,14 +10,28 @@ class UserRelationDaoMysql implements UserRelationDAO{
     }
 
     public function Insert(UserRelation $U){
+        $sql = $this->pdo->prepare('INSERT INTO userrelations (user_from, user_to) VALUES 
+        (:user_from, :user_to)');
+        $sql->bindValue(':user_from', $U->User_From);
+        $sql->bindValue(':user_to', $U->User_To);
+        $sql->execute();
         
+    }
+
+    public function Delete(UserRelation $U){
+        $sql = $this->pdo->prepare('DELETE FROM userrelations WHERE user_from =  :user_from AND 
+        user_to = :user_to');
+        $sql->bindValue(':user_from', $U->User_From);
+        $sql->bindValue(':user_to', $U->User_To);
+        $sql->execute();
+
     }
 
     public function GetFollowing($Id){
         $Users = [];
 
         $sql = $this->pdo->prepare('SELECT user_to FROM userrelations WHERE user_from = :user_from');
-        $sql->bindValue('user_from', $Id);
+        $sql->bindValue(':user_from', $Id); //provavel bug nesta linha falta :
         $sql->execute();
 
         if($sql->rowCount() >0){
@@ -45,6 +59,21 @@ class UserRelationDaoMysql implements UserRelationDAO{
         }
 
         return $Users;
+    }
+
+    public function IsFollowing($Id1, $Id2){
+        $sql = $this->pdo->prepare('SELECT * FROM userrelations WHERE
+        user_from = :user_from AND user_to = :user_to');
+        
+        $sql->bindValue(':user_from', $Id1);
+        $sql->bindValue(':user_to', $Id2);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
  }

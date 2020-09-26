@@ -2,6 +2,7 @@
 require_once 'config.php';
 require_once 'models/Auth.php';
 require_once 'dao/PostDaoMysql.php';
+require_once 'dao/UserRelationDaoMysql.php';
 
 
 $Auth = new Auth($pdo, $Base);
@@ -24,6 +25,8 @@ if ($Id != $UserInfo->Id) {
 
 $PostDao = new PostDaoMysql($pdo);
 $UserDao = new UserDaoMysql($pdo);
+$UserRelation = new UserRelationDaoMysql($pdo);
+
 
 //Pegar informações do Usuario, antes verificar se o ID existe
 
@@ -43,6 +46,8 @@ $User->AgeYears = $DateFrom->diff($DateNow)->y;
 $Feed = $PostDao->GetUserFeed($Id);
 
 //Verificar se segue o usuario
+
+$IsFollowing = $UserRelation->IsFollowing($UserInfo->Id, $Id);
 
 /*
 $PostDao = new PostDaoMysql($pdo);
@@ -70,6 +75,15 @@ require 'partials/menu.php';
                         <?php endif; ?>
                     </div>
                     <div class="profile-info-data row">
+
+                        <?php if ($Id != $UserInfo->Id) : ?>
+                            
+                            <div class="profile-info-item m-width-20">
+                                <a href="follow_action.php?id=<?=$Id;?>" class="button"><?=(!$IsFollowing)?'Seguir':'Parar de Seguir';?></a>
+                            </div>
+
+
+                        <?php endif; ?>
                         <div class="profile-info-item m-width-20">
                             <div class="profile-info-item-n"><?= count($User->Followers); ?></div>
                             <div class="profile-info-item-s">Seguidores</div>
