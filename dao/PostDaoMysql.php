@@ -29,6 +29,13 @@ class PostDaoMysql implements PostDAO
         $sql->execute();
     }
 
+    public function Delete($Id, $Id_User){
+        $sql = $this->pdo->prepare("DELETE FROM posts WHERE id = :id AND id_user = :id_user");
+        $sql->bindValue(':id', $Id);
+        $sql->bindValue(':id_user', $Id_User);
+        $sql->execute();
+    }
+
     public function GetHomeFeed($Id_User)
     {
         $Array = [];

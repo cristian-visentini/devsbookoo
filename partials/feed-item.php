@@ -27,9 +27,15 @@ switch ($Item->Type) {
                 <br />
                 <span class="fidi-date"><?= date('d/m/Y', strtotime($Item->Created_At)); ?></span>
             </div>
-            <div class="feed-item-head-btn">
-                <img src="<?= $Base; ?>/assets/images/more.png" />
-            </div>
+
+            <?php if ($Item->Mine) : ?>
+                <div class="feed-item-head-btn">
+                    <img src="<?= $Base; ?>/assets/images/more.png" />
+                    <div class="feed-item-more-window">
+                        <a href="<?= $Base; ?>/excluir_post_action.php?id=<?=$Item->Id;?>">Excluir Post</a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
 
@@ -39,15 +45,12 @@ switch ($Item->Type) {
                     nl2br($Item->Body);
                     break;
                 case 'photo':
-                    echo '<img src="'.$Base.'/media/uploads/'.$Item->Body.'">';
+                    echo '<img src="' . $Base . '/media/uploads/' . $Item->Body . '">';
                     break;
             }
 
             ?>
 
-
-
-           
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
             <div class="like-btn <?= $Item->Liked ? 'on' : ''; ?>"><?= $Item->LikeCount; ?></div>
