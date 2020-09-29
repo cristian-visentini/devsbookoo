@@ -180,6 +180,7 @@ require 'partials/menu.php';
 
                     <?php if (count($User->Photos) > 0) : ?>
                         <?php foreach ($User->Photos as $Key => $Item) : ?>
+                            <?php if ($Key < 4) : ?>
 
                             <div class="user-photo-item">
                                 <a href="#modal-<?= $Key; ?>" rel="modal:open">
@@ -189,7 +190,7 @@ require 'partials/menu.php';
                                     <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
                                 </div>
                             </div>
-
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
 
@@ -215,6 +216,11 @@ require 'partials/menu.php';
 
 
 </section>
+<script>
+window.onload = function(){
+    var modal = new VanillaModal();
+};
+</script>
 
 <?php
 require 'partials/footer.php';
