@@ -99,7 +99,7 @@ require 'partials/menu.php';
                         <?php foreach ($User->Photos as $Key => $Item) : ?>
 
                             <div class="user-photo-item">
-                                <a href="#modal-<?=$Key;?>" rel="modal:open">
+                                <a href="#modal-<?=$Key;?>" data-modal-open>
                                     <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
                                 </a>
                                 <div id="modal-<?=$Key;?>" style="display:none">
@@ -127,6 +127,12 @@ require 'partials/menu.php';
     </div>
 
 </section>
+
+<script>
+window.onload = function(){
+    var modal = new VanillaModal.default();
+};
+</script>
 
 <?php
 require 'partials/footer.php';

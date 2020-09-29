@@ -370,6 +370,10 @@ top: -500px;
     max-width: 100%;
 }
 
+.full-user-photos .user-photo-item {
+    max-width: 100%;
+}
+
 .tabs {
     border-bottom: 1px solid #c9cacc;
     display: flex;

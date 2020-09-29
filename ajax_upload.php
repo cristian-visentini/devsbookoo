@@ -21,12 +21,17 @@ if (isset($_FILES['photo']) && !empty($_FILES['photo']['tmp_name'])) {
         list($WidthOrigin, $HeightOrigin) = getimagesize($photo['tmp_name']);
         $Ratio = $WidthOrigin / $HeightOrigin;
 
-        $NewWidth = $MaxWidth;
-        $NewHeight = $NewWidth / $Ratio;
 
-        if ($NewHeight < $MaxHeight) {
-            $NewHeight = $MaxHeight;
+
+
+        $NewWidth = $MaxWidth;
+        $NewHeight = $MaxHeight;
+        $RatioMax = $MaxWidth / $NewHeight;
+
+        if ($RatioMax > $Ratio) {
             $NewWidth = $NewHeight * $Ratio;
+        }else{
+            $NewHeight = $MaxWidth / $Ratio;
         }
 
         $FinalImage = imagecreatetruecolor($NewWidth, $NewHeight);
