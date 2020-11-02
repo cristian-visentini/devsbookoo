@@ -31,16 +31,16 @@ require 'partials/menu.php';
     <div class="row">
         <div class="column pr-5">
 
-            <?php require 'partials/feed-editor.php';?>
+            <?php require 'partials/feed-editor.php'; ?>
 
-            <?php foreach($Feed as $Item):?>
-                <?php require 'partials/feed-item.php';?>
-            <?php endforeach;?>
+            <?php foreach ($Feed as $Item) : ?>
+                <?php require 'partials/feed-item.php'; ?>
+            <?php endforeach; ?>
 
             <div class="feed-pagination">
-                <?php for($q=0;$q<$Pages;$q++):?>
-                    <a class="<?=($q+1==$CurrentPage)?'active':'';?>" href="<?=$Base;?>/?p=<?=$q+1;?>"><?= $q+1;?></a>
-                <?php endfor;?>
+                <?php for ($q = 0; $q < $Pages; $q++) : ?>
+                    <a class="<?= ($q + 1 == $CurrentPage) ? 'active' : ''; ?>" href="<?= $Base; ?>/?p=<?= $q + 1; ?>"><?= $q + 1; ?></a>
+                <?php endfor; ?>
             </div>
 
         </div>
@@ -53,8 +53,8 @@ require 'partials/menu.php';
                     </div>
                 </div>
                 <div class="box-body">
-                    <a href=""><img src="https://alunos.b7web.com.br/media/courses/php-nivel-1.jpg" /></a>
-                    <a href=""><img src="https://alunos.b7web.com.br/media/courses/laravel-nivel-1.jpg" /></a>
+                    <a href="http://github.com/cristian-visentini" target="_blank"><img src="https://cdn.pixabay.com/photo/2017/08/05/11/24/logo-2582757_960_720.png" /></a>
+                    <a href="https://www.linkedin.com/in/cristian-visentini/" target="_blank"><img src="https://cdn.pixabay.com/photo/2016/11/18/11/16/social-1834011_960_720.png" /></a>
                 </div>
             </div>
             <div class="box">
