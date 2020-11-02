@@ -23,6 +23,15 @@ if ($Id != $UserInfo->Id) {
     $ActiveMenu = "";
 }
 
+//Pegar informaçoes de paginação
+
+$Page = intval(filter_input(INPUT_GET, 'p'));
+
+if ($Page < 1) {
+    $Page = 1;
+}
+
+
 $PostDao = new PostDaoMysql($pdo);
 $UserDao = new UserDaoMysql($pdo);
 $UserRelation = new UserRelationDaoMysql($pdo);
@@ -43,7 +52,7 @@ $User->AgeYears = $DateFrom->diff($DateNow)->y;
 
 //Pegar o FEED do usuario
 
-$Info = $PostDao->GetUserFeed($Id);
+$Info = $PostDao->GetUserFeed($Id, $Page);
 $Feed = $Info['feed'];
 $Pages = $Info['pages'];
 $CurrentPage = $Info['currentpage'];
@@ -214,7 +223,7 @@ require 'partials/menu.php';
 
                 <div class="feed-pagination">
                     <?php for ($q = 0; $q < $Pages; $q++) : ?>
-                        <a class="<?= ($q + 1 == $CurrentPage) ? 'active' : ''; ?>" href="<?= $Base; ?>/perfil.php?id=<?=$Id?>&p=<?= $q + 1; ?>"><?= $q + 1; ?></a>
+                        <a class="<?= ($q + 1 == $CurrentPage) ? 'active' : ''; ?>" href="<?= $Base; ?>/perfil.php?id=<?= $Id ?>&p=<?= $q + 1; ?>"><?= $q + 1; ?></a>
                     <?php endfor; ?>
                 </div>
 
