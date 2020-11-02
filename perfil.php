@@ -43,7 +43,10 @@ $User->AgeYears = $DateFrom->diff($DateNow)->y;
 
 //Pegar o FEED do usuario
 
-$Feed = $PostDao->GetUserFeed($Id);
+$Info = $PostDao->GetUserFeed($Id);
+$Feed = $Info['feed'];
+$Pages = $Info['pages'];
+$CurrentPage = $Info['currentpage'];
 
 //Verificar se segue o usuario
 
@@ -77,9 +80,9 @@ require 'partials/menu.php';
                     <div class="profile-info-data row">
 
                         <?php if ($Id != $UserInfo->Id) : ?>
-                            
+
                             <div class="profile-info-item m-width-20">
-                                <a href="follow_action.php?id=<?=$Id;?>" class="button"><?=(!$IsFollowing)?'Seguir':'Parar de Seguir';?></a>
+                                <a href="follow_action.php?id=<?= $Id; ?>" class="button"><?= (!$IsFollowing) ? 'Seguir' : 'Parar de Seguir'; ?></a>
                             </div>
 
 
@@ -182,14 +185,14 @@ require 'partials/menu.php';
                         <?php foreach ($User->Photos as $Key => $Item) : ?>
                             <?php if ($Key < 4) : ?>
 
-                            <div class="user-photo-item">
-                                <a href="#modal-<?= $Key; ?>" data-modal-open>
-                                    <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
-                                </a>
-                                <div id="modal-<?= $Key; ?>" style="display:none">
-                                    <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
+                                <div class="user-photo-item">
+                                    <a href="#modal-<?= $Key; ?>" data-modal-open>
+                                        <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
+                                    </a>
+                                    <div id="modal-<?= $Key; ?>" style="display:none">
+                                        <img src="<?= $Base; ?>/media/uploads/<?= $Item->Body; ?>">
+                                    </div>
                                 </div>
-                            </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -204,12 +207,18 @@ require 'partials/menu.php';
                 <?php require "partials/feed-editor.php"; ?>
             <?php endif; ?>
 
-
-
             <?php if (count($Feed) > 0) : ?>
                 <?php foreach ($Feed as $Item) : ?>
                     <?php require "partials/feed-item.php"; ?>
                 <?php endforeach; ?>
+
+                <div class="feed-pagination">
+                    <?php for ($q = 0; $q < $Pages; $q++) : ?>
+                        <a class="<?= ($q + 1 == $CurrentPage) ? 'active' : ''; ?>" href="<?= $Base; ?>/perfil.php?id=<?=$Id?>&p=<?= $q + 1; ?>"><?= $q + 1; ?></a>
+                    <?php endfor; ?>
+                </div>
+
+
             <?php else : ?>
                 Não há postagens desse Usuário ainda!
             <?php endif; ?>
@@ -217,9 +226,9 @@ require 'partials/menu.php';
 
 </section>
 <script>
-window.onload = function(){
-    var modal = new VanillaModal.default();
-};
+    window.onload = function() {
+        var modal = new VanillaModal.default();
+    };
 </script>
 
 <?php

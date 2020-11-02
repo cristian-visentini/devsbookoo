@@ -107,7 +107,6 @@ class PostDaoMysql implements PostDAO
         id_user IN (" . implode(',', $UserList) . ")");
 
         $TotalData = $sql->fetch();
-
         $Total = $TotalData['c'];
 
         $Array['pages'] = ceil($Total / $PerPage);
@@ -118,14 +117,23 @@ class PostDaoMysql implements PostDAO
 
     public function GetUserFeed($Id_User)
     {
-        $Array = [];
+        $Array = ['feed'=>[]];
 
+        $PerPage = 5;
+
+        $Page = intval(filter_input(INPUT_GET, 'p'));
+
+        if ($Page < 1) {
+            $Page = 1;
+        }
+
+        $OffSet = ($Page - 1) * $PerPage;
 
         //2 Pegar os Posts em ordem cronológica
 
         $sql = $this->pdo->prepare("SELECT * FROM posts WHERE
             id_user = :id_user
-            ORDER BY created_at DESC");
+            ORDER BY created_at DESC LIMIT $OffSet,$PerPage");
 
         $sql->bindValue(':id_user', $Id_User);
         $sql->execute();
@@ -135,10 +143,18 @@ class PostDaoMysql implements PostDAO
 
             //3 Transformar o resultado em objetos
 
-            $Array = $this->_PostListToObjects($Data, $Id_User);
+            $Array['feed'] = $this->_PostListToObjects($Data, $Id_User);
         }
 
+        $sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM posts WHERE
+            id_user = :id_user");
+        $sql->bindValue(':id_user', $Id_User);
+        $sql->execute();
+        $TotalData = $sql->fetch();
+        $Total = $TotalData['c'];
 
+        $Array['pages'] = ceil($Total / $PerPage);
+        $Array['currentpage'] = $Page;
 
         return $Array;
     }
