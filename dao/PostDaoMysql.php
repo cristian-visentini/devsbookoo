@@ -71,6 +71,15 @@ class PostDaoMysql implements PostDAO
     public function GetHomeFeed($Id_User)
     {
         $Array = [];
+        $PerPage = 5;
+
+        $Page = intval(filter_input(INPUT_GET, 'p'));
+
+        if($Page < 1){
+            $Page = 1;
+        }
+        
+        $OffSet = ($Page - 1) * $PerPage;
         //1 Lista dos usuarios que o usuario segue.
 
         $UrDao = new UserRelationDaoMysql($this->pdo);
@@ -81,7 +90,7 @@ class PostDaoMysql implements PostDAO
 
         $sql = $this->pdo->query("SELECT * FROM posts WHERE
             id_user IN (".implode(',', $UserList).")
-            ORDER BY created_at DESC");
+            ORDER BY created_at DESC LIMIT $OffSet, $PerPage");
 
             if($sql->rowCount() >0){
                 $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -90,8 +99,6 @@ class PostDaoMysql implements PostDAO
 
                 $Array = $this->_PostListToObjects($Data, $Id_User);
             }
-
-        
 
         return $Array;
     }

@@ -32,7 +32,7 @@ switch ($Item->Type) {
                 <div class="feed-item-head-btn">
                     <img src="<?= $Base; ?>/assets/images/more.png" />
                     <div class="feed-item-more-window">
-                        <a href="<?= $Base; ?>/excluir_post_action.php?id=<?=$Item->Id;?>">Excluir Post</a>
+                        <a href="<?= $Base; ?>/excluir_post_action.php?id=<?= $Item->Id; ?>">Excluir Post</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -42,7 +42,7 @@ switch ($Item->Type) {
             <?php
             switch ($Item->Type) {
                 case 'text':
-                    nl2br($Item->Body);
+                   echo nl2br($Item->Body);
                     break;
                 case 'photo':
                     echo '<img src="' . $Base . '/media/uploads/' . $Item->Body . '">';
