@@ -29,7 +29,8 @@ class PostDaoMysql implements PostDAO
         $sql->execute();
     }
 
-    public function Delete($Id, $Id_User){
+    public function Delete($Id, $Id_User)
+    {
         $PostLikeDao = new PostLikeDaoMysql($this->pdo);
         $PostCommentDao = new PostCommentDaoMysql($this->pdo);
 
@@ -40,24 +41,24 @@ class PostDaoMysql implements PostDAO
         $sql->bindValue(':id_user', $Id_User);
         $sql->execute();
 
-        if($sql->rowCount() >0){
+        if ($sql->rowCount() > 0) {
             $Post = $sql->fetch(PDO::FETCH_ASSOC);
 
-             //deletar likes e Comemts
+            //deletar likes e Comemts
 
-             $PostLikeDao->DeleteFromPost($Id);
-             $PostCommentDao->DeleteFromPost($Id);
+            $PostLikeDao->DeleteFromPost($Id);
+            $PostCommentDao->DeleteFromPost($Id);
 
-             //Se foto, deletar o arquivo
+            //Se foto, deletar o arquivo
 
-             if($Post['type'] === 'photo'){
-                $Img = 'media/uploads/'.$Post['body'];
-                if(file_exists($Img)){
+            if ($Post['type'] === 'photo') {
+                $Img = 'media/uploads/' . $Post['body'];
+                if (file_exists($Img)) {
                     unlink($Img);
                 }
-             }
+            }
 
-              //deletar o post de fato
+            //deletar o post de fato
 
 
         }
@@ -75,11 +76,12 @@ class PostDaoMysql implements PostDAO
 
         $Page = intval(filter_input(INPUT_GET, 'p'));
 
-        if($Page < 1){
+        if ($Page < 1) {
             $Page = 1;
         }
-        
+
         $OffSet = ($Page - 1) * $PerPage;
+
         //1 Lista dos usuarios que o usuario segue.
 
         $UrDao = new UserRelationDaoMysql($this->pdo);
@@ -89,16 +91,27 @@ class PostDaoMysql implements PostDAO
         //2 Pegar os Posts em ordem cronológica
 
         $sql = $this->pdo->query("SELECT * FROM posts WHERE
-            id_user IN (".implode(',', $UserList).")
-            ORDER BY created_at DESC LIMIT $OffSet, $PerPage");
+            id_user IN (" . implode(',', $UserList) . ")
+            ORDER BY created_at DESC, id DESC LIMIT $OffSet,$PerPage");
 
-            if($sql->rowCount() >0){
-                $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if ($sql->rowCount() > 0) {
+            $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-                //3 Transformar o resultado em objetos
+            //3 Transformar o resultado em objetos
 
-                $Array = $this->_PostListToObjects($Data, $Id_User);
-            }
+            $Array['feed'] = $this->_PostListToObjects($Data, $Id_User);
+        }
+
+        //4 pegar total de posts
+        $sql = $this->pdo->query("SELECT COUNT(*) as c FROM posts WHERE
+        id_user IN (" . implode(',', $UserList) . ")");
+
+        $TotalData = $sql->fetch();
+
+        $Total = $TotalData['c'];
+
+        $Array['pages'] = ceil($Total / $PerPage);
+        $Array['currentpage'] = $Page;
 
         return $Array;
     }
@@ -106,7 +119,7 @@ class PostDaoMysql implements PostDAO
     public function GetUserFeed($Id_User)
     {
         $Array = [];
-        
+
 
         //2 Pegar os Posts em ordem cronológica
 
@@ -114,34 +127,35 @@ class PostDaoMysql implements PostDAO
             id_user = :id_user
             ORDER BY created_at DESC");
 
-            $sql->bindValue(':id_user', $Id_User);
-            $sql->execute();
+        $sql->bindValue(':id_user', $Id_User);
+        $sql->execute();
 
-            if($sql->rowCount() >0){
-                $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if ($sql->rowCount() > 0) {
+            $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-                //3 Transformar o resultado em objetos
+            //3 Transformar o resultado em objetos
 
-                $Array = $this->_PostListToObjects($Data, $Id_User);
-            }
+            $Array = $this->_PostListToObjects($Data, $Id_User);
+        }
 
-        
+
 
         return $Array;
     }
 
 
-    public function GetPhotosFrom($Id_User){
+    public function GetPhotosFrom($Id_User)
+    {
         $Array = [];
 
         $sql = $this->pdo->prepare("SELECT * FROM posts WHERE
             id_user = :id_user AND type = 'photo'
             ORDER BY created_at DESC");
 
-         $sql->bindValue(':id_user', $Id_User);
-         $sql->execute();
+        $sql->bindValue(':id_user', $Id_User);
+        $sql->execute();
 
-         if($sql->rowCount() >0){
+        if ($sql->rowCount() > 0) {
             $Data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
             //3 Transformar o resultado em objetos
@@ -153,13 +167,14 @@ class PostDaoMysql implements PostDAO
         return $Array;
     }
 
-    private function _PostListToObjects($PostList, $Id_User){
+    private function _PostListToObjects($PostList, $Id_User)
+    {
         $Posts = [];
         $UserDao = new UserDaoMysql($this->pdo);
         $PostLikeDao = new PostLikeDaoMysql($this->pdo);
         $PostCommentDao = new PostCommentDaoMysql($this->pdo);
 
-        foreach($PostList as $Post_Item){
+        foreach ($PostList as $Post_Item) {
             $NewPost = new Post();
 
             $NewPost->Id = $Post_Item['id'];
@@ -168,8 +183,8 @@ class PostDaoMysql implements PostDAO
             $NewPost->Body = $Post_Item['body'];
             $NewPost->Mine = false;
 
-            if($Post_Item['id_user'] == $Id_User){
-                $NewPost->Mine = true; 
+            if ($Post_Item['id_user'] == $Id_User) {
+                $NewPost->Mine = true;
             }
 
             //Pegar informações do usuario.
