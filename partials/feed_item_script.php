@@ -1,5 +1,5 @@
 <script>
-window.onload = function() {
+window.addEventListener('load', function(){
 
     function closeFeedWindow() {
         document.querySelectorAll('.feed-item-more-window').forEach(item=>{
@@ -74,5 +74,5 @@ window.onload = function() {
             }
         });
     });
-};
+})
 </script>
